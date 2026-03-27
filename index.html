@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Built Resilient — Clifford | Health & Performance Coach</title>
+<meta name="description" content="10+ years coaching office workers, powerlifters, climbers, and endurance athletes. Health-first programming backed by metabolic testing and real-world strength.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --off-black: #111111;
+    --dark-grey: #1a1a1a;
+    --mid-grey: #2a2a2a;
+    --chalk: #e8e4de;
+    --warm-white: #f5f1eb;
+    --accent: #c4453c;
+    --accent-dim: #9a342e;
+    --rust: #b8593a;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Source Serif 4', Georgia, serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--chalk);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: transform 0.3s ease;
+  }
+
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--warm-white);
+    text-decoration: none;
+  }
+
+  .nav-brand span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2rem; }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 222, 0.5);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(196, 69, 60, 0.07), transparent),
+      radial-gradient(ellipse 50% 70% at 20% 80%, rgba(184, 89, 58, 0.05), transparent);
+  }
+
+  .hero-number {
+    position: absolute;
+    top: 50%;
+    right: -2%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: clamp(15rem, 30vw, 35rem);
+    color: rgba(255,255,255,0.018);
+    line-height: 0.8;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--warm-white);
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    display: inline-block;
+    position: relative;
+  }
+
+  .hero-sub {
+    max-width: 500px;
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    color: rgba(232, 228, 222, 0.6);
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
+
+  .btn-primary:hover {
+    background: var(--warm-white);
+    color: var(--black);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--chalk);
+    border: 1px solid rgba(232, 228, 222, 0.2);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ─── DIVIDER BAR ─── */
+  .stat-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--off-black);
+  }
+
+  .stat-item {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 222, 0.4);
+    margin-top: 0.5rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 2rem; }
+
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    color: var(--warm-white);
+    line-height: 0.95;
+    max-width: 700px;
+    margin-bottom: 2rem;
+  }
+
+  /* ─── ABOUT ─── */
+  .about {
+    background: var(--off-black);
+    position: relative;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .about-text p {
+    color: rgba(232, 228, 222, 0.65);
+    margin-bottom: 1.5rem;
+    font-size: 1.02rem;
+  }
+
+  .about-text p strong {
+    color: var(--warm-white);
+    font-weight: 600;
+  }
+
+  .about-traits {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .trait {
+    padding: 1.75rem;
+    background: var(--dark-grey);
+    border-left: 3px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trait::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(196, 69, 60, 0.03));
+  }
+
+  .trait-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .trait-text {
+    color: rgba(232, 228, 222, 0.55);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  /* ─── SERVICES ─── */
+  .services { background: var(--black); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .service-card {
+    background: var(--off-black);
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .service-card:hover {
+    background: var(--dark-grey);
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  .service-card:hover::before { width: 100%; }
+
+  .service-icon {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: rgba(196, 69, 60, 0.25);
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .service-name {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--warm-white);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-desc {
+    color: rgba(232, 228, 222, 0.5);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .service-clients {
+    margin-top: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 222, 0.3);
+  }
+
+  /* ─── APPROACH ─── */
+  .approach {
+    background: var(--off-black);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .approach-content {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .approach-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 1rem;
+  }
+
+  .step-number {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: rgba(196, 69, 60, 0.15);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--warm-white);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-desc {
+    color: rgba(232, 228, 222, 0.5);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* ─── CTA / CONTACT ─── */
+  .contact {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact::before {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -10%;
+    width: 50%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(196, 69, 60, 0.06), transparent);
+    pointer-events: none;
+  }
+
+  .contact-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+
+  .contact-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--warm-white);
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-heading em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .contact-text {
+    color: rgba(232, 228, 222, 0.55);
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 222, 0.4);
+    margin-bottom: 0.4rem;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: var(--dark-grey);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--chalk);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+    outline: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  .form-group select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  .form-group select option {
+    background: var(--dark-grey);
+    color: var(--chalk);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea { min-height: 120px; resize: vertical; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .contact-form .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 1.1rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: rgba(232, 228, 222, 0.3);
+  }
+
+  .footer-right {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 222, 0.2);
+  }
+
+  .footer-right a {
+    color: rgba(232, 228, 222, 0.35);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-right a:hover { color: var(--accent); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    section { padding: 4rem 1.25rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .approach-steps { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { gap: 1.25rem; }
+    .nav-links a { font-size: 0.6rem; }
+    .hero { padding: 2rem 1.25rem 3rem; }
+    .stat-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+    .hero h1 { font-size: 3rem; }
+    .stat-bar { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">BUILT <span>RESILIENT</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#approach">Process</a>
+    <a href="#contact">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-number">10+</div>
+  <div class="hero-tag">Health & Performance Coach — Essex, UK</div>
+  <h1>STRENGTH IS <em>BUILT.</em><br>RESILIENCE IS <em>EARNED.</em></h1>
+  <p class="hero-sub">10+ years helping real people get stronger, move better, and perform at their best. From the desk-bound to the platform — coached with data, built on trust.</p>
+  <div class="hero-cta">
+    <a href="#contact" class="btn btn-primary">Start the conversation →</a>
+    <a href="#services" class="btn btn-outline">See how I work</a>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-item">
+    <div class="stat-number">10+</div>
+    <div class="stat-label">Years Coaching</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">VO₂</div>
+    <div class="stat-label">Metabolic Testing</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">IPF</div>
+    <div class="stat-label">Competitive Lifter</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">DAD</div>
+    <div class="stat-label">First & Foremost</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-tag">// Who I Am</div>
+      <div class="section-heading">I COACH WHAT I LIVE</div>
+      <p>I'm Clifford — a health and performance coach with over a decade in the trenches. I'm also a competitive powerlifter, a dad to a toddler, and someone who believes <strong>your health comes before your ego</strong>.</p>
+      <p>I use tools like <strong>PNOE metabolic testing</strong> and <strong>InBody composition analysis</strong> to take the guesswork out of programming. Every programme I write is backed by data, built on evidence, and designed for your life — not someone else's highlight reel.</p>
+      <p>I've worked with office workers who can't touch their toes, powerlifters chasing national records, climbers building finger strength, and endurance athletes hunting PBs. The common thread? <strong>Health first. Always.</strong></p>
+    </div>
+    <div class="about-traits reveal" style="transition-delay: 0.15s;">
+      <div class="trait">
+        <div class="trait-label">Philosophy</div>
+        <div class="trait-text">Health is the baseline. Performance is built on top. Never the other way around.</div>
+      </div>
+      <div class="trait">
+        <div class="trait-label">Method</div>
+        <div class="trait-text">Data-driven programming. Metabolic testing, movement screening, and honest conversation — then we build the plan.</div>
+      </div>
+      <div class="trait">
+        <div class="trait-label">Standard</div>
+        <div class="trait-text">I compete, I train, I get it wrong, I learn. If I'm asking you to do it, I've done it myself.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-tag reveal">// What I Do</div>
+    <div class="section-heading reveal">BUILT FOR HOW YOU MOVE</div>
+  </div>
+  <div class="services-grid reveal" style="transition-delay: 0.1s;">
+    <div class="service-card">
+      <div class="service-icon">01</div>
+      <div class="service-name">OFFICE WORKER RESET</div>
+      <div class="service-desc">Undo the damage of desk life. Rebuild posture, build genuine strength, and create a sustainable habit that fits around your work and family.</div>
+      <div class="service-clients">→ Desk-bound professionals / new to training</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">02</div>
+      <div class="service-name">STRENGTH & POWER</div>
+      <div class="service-desc">Structured periodisation for competitive and recreational powerlifters. Prehab-first programming that keeps you healthy and on the platform.</div>
+      <div class="service-clients">→ Powerlifters / strength athletes</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">03</div>
+      <div class="service-name">ENDURANCE PERFORMANCE</div>
+      <div class="service-desc">Metabolic testing to anchor your zones. Strength work to bulletproof your body. Programming that makes the miles count.</div>
+      <div class="service-clients">→ Runners / endurance athletes</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">04</div>
+      <div class="service-name">CLIMBING STRENGTH</div>
+      <div class="service-desc">Off-wall programming built around climbing demands. Finger strength, pulling power, mobility, and CNS-smart sequencing.</div>
+      <div class="service-clients">→ Boulderers / sport climbers</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">05</div>
+      <div class="service-name">METABOLIC & BODY COMP</div>
+      <div class="service-desc">PNOE VO₂max testing and InBody scans — real data to drive real decisions. Know exactly where you are before we plan where you're going.</div>
+      <div class="service-clients">→ Available to all clients</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">06</div>
+      <div class="service-name">HYPERTROPHY</div>
+      <div class="service-desc">Evidence-based muscle building for anyone who wants to look and feel stronger. Smart volume, progressive overload, and time-efficient sessions.</div>
+      <div class="service-clients">→ Aesthetic / general population</div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="approach" id="approach">
+  <div class="approach-content">
+    <div class="section-tag reveal">// How It Works</div>
+    <div class="section-heading reveal">NO FLUFF. JUST PROCESS.</div>
+    <div class="approach-steps">
+      <div class="reveal" style="transition-delay: 0.05s;">
+        <div class="step-number">01</div>
+        <div class="step-title">ASSESS</div>
+        <div class="step-desc">We start with an honest conversation and real data — metabolic testing, movement screen, body composition, training history. No guessing.</div>
+      </div>
+      <div class="reveal" style="transition-delay: 0.15s;">
+        <div class="step-number">02</div>
+        <div class="step-title">BUILD</div>
+        <div class="step-desc">I write your programme around your goals, your life, and what the data tells us. Health first, then performance. Delivered through BridgeAthletic.</div>
+      </div>
+      <div class="reveal" style="transition-delay: 0.25s;">
+        <div class="step-number">03</div>
+        <div class="step-title">ADAPT</div>
+        <div class="step-desc">Monthly check-ins, reassessment, and honest feedback. Programmes evolve as you do. This isn't a template — it's a partnership.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="section-tag reveal">// Get Started</div>
+    <div class="contact-heading reveal">READY TO<br><em>BUILD?</em></div>
+    <p class="contact-text reveal">Drop me a message and let's talk about where you are, where you want to be, and whether we're a good fit.</p>
+    <form class="contact-form reveal" style="transition-delay: 0.1s;" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="interest">I'm interested in</label>
+        <select id="interest" name="interest">
+          <option value="" disabled selected>Select a service</option>
+          <option value="office-worker">Office Worker Reset</option>
+          <option value="strength">Strength & Power</option>
+          <option value="endurance">Endurance Performance</option>
+          <option value="climbing">Climbing Strength</option>
+          <option value="metabolic">Metabolic & Body Comp Testing</option>
+          <option value="hypertrophy">Hypertrophy</option>
+          <option value="not-sure">Not sure yet — let's talk</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Tell me a bit about yourself</label>
+        <textarea id="message" name="message" placeholder="Training history, goals, injuries — whatever you think I should know."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Enquiry →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">BUILT RESILIENT</div>
+  <div class="footer-right">
+    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    Essex, UK
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    © 2026
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Form handler (placeholder)
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Sent ✓';
+    btn.style.background = 'var(--rust)';
+    setTimeout(() => {
+      btn.textContent = 'Send Enquiry →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
